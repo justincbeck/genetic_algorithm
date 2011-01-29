@@ -1,0 +1,6 @@
+if [[ -d "$rvm_path/environments" && -s "$rvm_path/environments/ruby-1.9.2-p136@genetic_algorithm" ]] ; then
+  \. "$rvm_path/environments/ruby-1.9.2-p136@genetic_algorithm"
+else
+  rvm --create use  "ruby-1.9.2-p136@genetic_algorithm"
+fi
+
