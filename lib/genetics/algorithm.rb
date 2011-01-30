@@ -1,89 +1,74 @@
 module Genetics
   class Citizen
-    attr_accessor :fitness, :string
+    attr_accessor :string, :fitness
+    
+    def initialize(string = nil, fitness = nil)
+      self.string = !string.nil? ? string : String.new
+      self.fitness = !fitness.nil? ? fitness : 0
+    end
   end
   
   class Algorithm
+    attr_accessor :population # For testing
+    
     @@GA_POP_SIZE = 2048
-    @@GA_MAX_ITERATIONS = 16384
+    @@GA_MAX_ITERATIONS = 200
     @@RAND_MAX = 32767
     @@GA_ELITISM_RATE = 0.10
     @@GA_MUTATION_RATE = 0.25
     @@GA_MUTATION = @@RAND_MAX * @@GA_MUTATION_RATE
-    @@GA_TARGET = "Hello World!"
+    @@GA_TARGET = "Hello world!"
     
     def initialize(output)
       @output = output
+    end
+    
+    def init_population # Verified (Sort of)
       @population = Array.new
-    end
-    
-    def execute
-      init_population
-      
-      # @@GA_MAX_ITERATIONS.times do
-      20.times do
-        calc_fitness
-        sort_by_fitness
-        print_best
-        
-        if @population[0].fitness == 0
-          break
-        end
-        
-        mate
-        swap
-      end
-    end
-    
-    private
-    
-    def init_population
       target_size = @@GA_TARGET.length
 
       @@GA_POP_SIZE.times do
         citizen = Citizen.new
-        citizen.fitness = 0
-        citizen.string = @@GA_TARGET.length.times.map { 48.+( rand(74) ).chr }.join
+        
+        target_size.times do
+          citizen.string += ((rand(@@RAND_MAX) % 90) + 32).chr
+        end
 
         @population << citizen
       end
       
-      @buffer = Array.new(@population.length, Citizen.new)
+      @buffer = Array.new(@population.length, Citizen.new) # If I don't do this I get bombarded with NPEs
     end
     
-    def calc_fitness
-      target_size = @@GA_TARGET.length
-      
-      @@GA_POP_SIZE.times do |i|
-        fitness = 0
-        target_size.times do |j|
-          x = @population[i].string.getbyte(j)
-          y = @@GA_TARGET.getbyte(j)
-          fitness += (x - y).abs
-        end
-        
-        @population[i].fitness = fitness
+    def calc_fitness(citizen) # Verified and tested
+      target = @@GA_TARGET
+      target_size = target.length
+      fitness = 0
+
+      (0..(target_size - 1)).each do |j|
+        fitness += (citizen.string.getbyte(j) - target.getbyte(j)).abs
       end
+      
+      fitness
     end
     
-    def sort_by_fitness
-      @population.sort { |x, y| x.fitness <=> y.fitness }
+    def sort_by_fitness(population) # Verified and tested
+      population.sort { |x, y| x.fitness <=> y.fitness }
     end
     
-    def print_best
-      @output.puts("Best: #{@population[0].string} (#{@population[0].fitness})")
+    def print_best(citizen) # Verified and tested
+      @output.puts("Best: #{citizen.string} (#{citizen.fitness})")
     end
     
     def mate
-      esize = @@GA_POP_SIZE * @@GA_ELITISM_RATE
-      tsize = @@GA_TARGET.length
+      esize = (@@GA_POP_SIZE * @@GA_ELITISM_RATE).to_i # Verified
+      tsize = @@GA_TARGET.length # Verified
       
-      elitism(esize - 1)
+      elitism(esize)
       
-      (esize.to_i..(@@GA_POP_SIZE - 1)).each do |i|
+      (esize..(@@GA_POP_SIZE - 1)).each do |i|
         i1 = rand(@@RAND_MAX) % (@@GA_POP_SIZE / 2)
         i2 = rand(@@RAND_MAX) % (@@GA_POP_SIZE / 2)
-        
         spos = rand(@@RAND_MAX) % tsize
         
         @buffer[i].string = @population[i1].string[0, spos] + @population[i2].string[spos, esize - spos]
@@ -95,7 +80,7 @@ module Genetics
     end
     
     def elitism(esize)
-      (0..esize).each do |i|
+      esize.times do |i|
         @buffer[i].string = @population[i].string
         @buffer[i].fitness = @population[i].fitness
       end
@@ -104,15 +89,36 @@ module Genetics
     def mutate(citizen)
       tsize = @@GA_TARGET.length
       ipos = rand(@@RAND_MAX) % tsize
-      delta = 48.+( rand(74) )
+      delta = (rand(@@RAND_MAX) % 90) + 32
       
-      citizen.string[ipos] = (citizen.string[ipos] + delta.to_i.to_s) % 74
+      citizen.string[ipos] = ((citizen.string.getbyte(ipos) + delta) % 122).chr
     end
     
     def swap
       temp = @population
       @population = @buffer
       @buffer = temp
+    end
+
+    def execute
+      init_population
+      
+      @@GA_MAX_ITERATIONS.times do
+        
+        @@GA_POP_SIZE.times do |i|
+          @population[i].fitness = calc_fitness(@population[i])
+        end
+        
+        @population = sort_by_fitness(@population)
+        print_best(@population[0])
+        
+        if @population[0].fitness == 0
+          break
+        end
+        
+        mate
+        swap
+      end
     end
   end
 end
