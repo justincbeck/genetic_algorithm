@@ -1,6 +1,3 @@
-
-#pragma warning(disable:4786)		// disable debug warning
-
 #include <iostream>					// for cout etc.
 #include <vector>					// for vector class
 #include <string>					// for string class
