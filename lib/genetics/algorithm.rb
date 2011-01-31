@@ -21,11 +21,11 @@ module Genetics
     
     def initialize(output)
       @output = output
+      @population = Array.new
+      @buffer = Array.new
     end
     
     def init_population
-      @population = Array.new
-      @buffer = Array.new
       target_size = @@GA_TARGET.length
 
       @@GA_POP_SIZE.times do
@@ -73,7 +73,7 @@ module Genetics
         @buffer[i] = Citizen.new(@population[i1].string[0, spos] + @population[i2].string[spos, esize - spos], 0)
         
         if rand(@@RAND_MAX) < @@GA_MUTATION
-          @buffer[i].string = mutate(@buffer[i].string)
+          mutate(@buffer[i])
         end
       end
     end
@@ -84,12 +84,12 @@ module Genetics
       end
     end
     
-    def mutate(string)
+    def mutate(citizen)
       tsize = @@GA_TARGET.length
       ipos = rand(@@RAND_MAX) % tsize
       delta = (rand(@@RAND_MAX) % 90) + 32
       
-      ((string.getbyte(ipos) + delta) % 122).chr
+      ((citizen.string.getbyte(ipos) + delta) % 122).chr
     end
     
     def swap
