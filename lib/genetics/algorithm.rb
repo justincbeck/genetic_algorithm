@@ -2,9 +2,9 @@ module Genetics
   class Citizen
     attr_accessor :string, :fitness
     
-    def initialize(string = nil, fitness = nil)
+    def initialize(string = nil)
       self.string = !string.nil? ? string : String.new
-      self.fitness = !fitness.nil? ? fitness : 0
+      self.fitness = 0
     end
   end
   
@@ -12,7 +12,8 @@ module Genetics
     attr_accessor :population # For testing
     
     @@GA_POP_SIZE = 2048
-    @@GA_MAX_ITERATIONS = 200
+    # @@GA_MAX_ITERATIONS = 16384
+    @@GA_MAX_ITERATIONS = 50
     @@RAND_MAX = 32767
     @@GA_ELITISM_RATE = 0.10
     @@GA_MUTATION_RATE = 0.25
@@ -25,6 +26,7 @@ module Genetics
     
     def init_population # Verified (Sort of)
       @population = Array.new
+      @buffer = Array.new
       target_size = @@GA_TARGET.length
 
       @@GA_POP_SIZE.times do
@@ -37,7 +39,7 @@ module Genetics
         @population << citizen
       end
       
-      @buffer = Array.new(@population.length, Citizen.new) # If I don't do this I get bombarded with NPEs
+      # @buffer = Array.new(@population.length, Citizen.new) # If I don't do this I get bombarded with NPEs
     end
     
     def calc_fitness(citizen) # Verified and tested
@@ -71,6 +73,7 @@ module Genetics
         i2 = rand(@@RAND_MAX) % (@@GA_POP_SIZE / 2)
         spos = rand(@@RAND_MAX) % tsize
         
+        @buffer[i] = Citizen.new if @buffer[i].nil?
         @buffer[i].string = @population[i1].string[0, spos] + @population[i2].string[spos, esize - spos]
         
         if rand(@@RAND_MAX) < @@GA_MUTATION
@@ -81,6 +84,7 @@ module Genetics
     
     def elitism(esize)
       esize.times do |i|
+        @buffer[i] = Citizen.new
         @buffer[i].string = @population[i].string
         @buffer[i].fitness = @population[i].fitness
       end
