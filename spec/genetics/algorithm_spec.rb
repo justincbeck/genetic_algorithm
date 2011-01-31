@@ -74,5 +74,59 @@ module Genetics
         algorithm.print_best(citizen)
       end
     end
+    
+    describe "#mate" # Not sure what to do here yet
+    
+    describe "#elitism" do
+      let(:output) { double('output').as_null_object }
+      let(:algorithm) { Algorithm.new(output) }
+      
+      it "should populate the buffer with the top 10% of citizens based on fitness" do
+        algorithm.init_population
+        algorithm.population.each do |citizen|
+          citizen.fitness = algorithm.calc_fitness(citizen)
+        end
+        
+        algorithm.elitism(204)
+        algorithm.buffer.size.should eql(204)
+        (0..203).each do |i|
+          algorithm.buffer[i].string.should eql(algorithm.population[i].string)
+          algorithm.buffer[i].fitness.should eql(algorithm.population[i].fitness)
+        end
+      end
+    end
+    
+    describe "#mutate" do
+      let(:output) { double('output').as_null_object }
+      let(:algorithm) { Algorithm.new(output) }
+      
+      it "should return a mutated string" do
+        algorithm.mutate("Csnqt(xdfoe%").should be_an_instance_of(String)
+      end
+    end
+    
+    describe "#swap" do
+      let(:output) { double('output').as_null_object }
+      let(:algorithm) { Algorithm.new(output) }
+      
+      it "should swap buffer and population" do
+        population = Array.new
+        population << Citizen.new("I+#prA?8dj;G", 378)
+        population << Citizen.new("Hello world!", 0)
+        population << Citizen.new("IQQte=Ygqem#", 152)
+        
+        buffer = Array.new
+        buffer << Citizen.new("Heiru(uoqid%", 33)
+        buffer << Citizen.new("I\rtkHoks`i;", 124)
+        buffer << Citizen.new("Hemlp woqld", 4)
+        
+        algorithm.population = population
+        algorithm.buffer = buffer
+        algorithm.swap
+        
+        algorithm.population.should eql(buffer)
+        algorithm.buffer.should eql(population)
+      end
+    end
   end
 end

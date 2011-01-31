@@ -2,14 +2,14 @@ module Genetics
   class Citizen
     attr_accessor :string, :fitness
     
-    def initialize(string = nil)
+    def initialize(string = nil, fitness = nil)
       self.string = !string.nil? ? string : String.new
-      self.fitness = 0
+      self.fitness = !fitness.nil? ? fitness : 0
     end
   end
   
   class Algorithm
-    attr_accessor :population # For testing
+    attr_accessor :population, :buffer # For testing
     
     @@GA_POP_SIZE = 2048
     @@GA_MAX_ITERATIONS = 16384
@@ -23,7 +23,7 @@ module Genetics
       @output = output
     end
     
-    def init_population # Verified (Sort of)
+    def init_population # Verified and tested
       @population = Array.new
       @buffer = Array.new
       target_size = @@GA_TARGET.length
@@ -37,8 +37,6 @@ module Genetics
 
         @population << citizen
       end
-      
-      # @buffer = Array.new(@population.length, Citizen.new) # If I don't do this I get bombarded with NPEs
     end
     
     def calc_fitness(citizen) # Verified and tested
@@ -62,8 +60,8 @@ module Genetics
     end
     
     def mate
-      esize = (@@GA_POP_SIZE * @@GA_ELITISM_RATE).to_i # Verified
-      tsize = @@GA_TARGET.length # Verified
+      esize = (@@GA_POP_SIZE * @@GA_ELITISM_RATE).to_i
+      tsize = @@GA_TARGET.length
       
       elitism(esize)
       
@@ -72,32 +70,29 @@ module Genetics
         i2 = rand(@@RAND_MAX) % (@@GA_POP_SIZE / 2)
         spos = rand(@@RAND_MAX) % tsize
         
-        @buffer[i] = Citizen.new if @buffer[i].nil?
-        @buffer[i].string = @population[i1].string[0, spos] + @population[i2].string[spos, esize - spos]
+        @buffer[i] = Citizen.new(@population[i1].string[0, spos] + @population[i2].string[spos, esize - spos], 0)
         
         if rand(@@RAND_MAX) < @@GA_MUTATION
-          mutate(@buffer[i])
+          @buffer[i].string = mutate(@buffer[i].string)
         end
       end
     end
     
-    def elitism(esize)
+    def elitism(esize) # Tested and verified
       esize.times do |i|
-        @buffer[i] = Citizen.new
-        @buffer[i].string = @population[i].string
-        @buffer[i].fitness = @population[i].fitness
+        @buffer[i] = Citizen.new(@population[i].string, @population[i].fitness)
       end
     end
     
-    def mutate(citizen)
+    def mutate(string) # Tested and verified
       tsize = @@GA_TARGET.length
       ipos = rand(@@RAND_MAX) % tsize
       delta = (rand(@@RAND_MAX) % 90) + 32
       
-      citizen.string[ipos] = ((citizen.string.getbyte(ipos) + delta) % 122).chr
+      ((string.getbyte(ipos) + delta) % 122).chr
     end
     
-    def swap
+    def swap # Tested and verified
       temp = @population
       @population = @buffer
       @buffer = temp
