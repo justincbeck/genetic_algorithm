@@ -12,8 +12,7 @@ module Genetics
     attr_accessor :population # For testing
     
     @@GA_POP_SIZE = 2048
-    # @@GA_MAX_ITERATIONS = 16384
-    @@GA_MAX_ITERATIONS = 50
+    @@GA_MAX_ITERATIONS = 16384
     @@RAND_MAX = 32767
     @@GA_ELITISM_RATE = 0.10
     @@GA_MUTATION_RATE = 0.25
