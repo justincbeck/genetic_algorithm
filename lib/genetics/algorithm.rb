@@ -25,7 +25,7 @@ module Genetics
       @buffer = Array.new
     end
     
-    def init_population # Verified and tested
+    def init_population
       target_size = @@GA_TARGET.length
 
       @@GA_POP_SIZE.times do
@@ -39,7 +39,7 @@ module Genetics
       end
     end
     
-    def calc_fitness(citizen) # Verified and tested
+    def calc_fitness(citizen)
       target = @@GA_TARGET
       target_size = target.length
       fitness = 0
@@ -51,7 +51,7 @@ module Genetics
       fitness
     end
     
-    def sort_by_fitness(population) # Verified and tested
+    def sort_by_fitness(population)
       population.sort { |x, y| x.fitness <=> y.fitness }
     end
     
@@ -78,13 +78,13 @@ module Genetics
       end
     end
     
-    def elitism(esize) # Tested and verified
+    def elitism(esize)
       esize.times do |i|
         @buffer[i] = Citizen.new(@population[i].string, @population[i].fitness)
       end
     end
     
-    def mutate(citizen) # Tested and verified
+    def mutate(string)
       tsize = @@GA_TARGET.length
       ipos = rand(@@RAND_MAX) % tsize
       delta = (rand(@@RAND_MAX) % 90) + 32
@@ -92,7 +92,7 @@ module Genetics
       citizen.string[ipos] = ((citizen.string.getbyte(ipos) + delta) % 122).chr
     end
     
-    def swap # Tested and verified
+    def swap
       temp = @population
       @population = @buffer
       @buffer = temp

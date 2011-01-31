@@ -1,6 +1,6 @@
 A demonstration of a genetic algorithm written in Ruby.  I needed an algorithm like this to be used in a shift scheduling application that I am writing.  Porting from c++ to Ruby was a great exercise and enabled me to understand the code better.
 
-Basically, all this does it go through each member of the population and compare it with the target string. It adds up the differences between the characters and uses the cumulative sum as the fitness value (therefore, the lower the value, the better).
+Basically, all this does is go through each member of the population and compare it with the target string. It adds up the differences between the characters and uses the cumulative sum as the fitness value (therefore, the lower the value, the better).
 
 This was ported from a c++ program that can be found here:
 

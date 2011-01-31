@@ -75,7 +75,20 @@ module Genetics
       end
     end
     
-    describe "#mate" # Not sure what to do here yet
+    describe "#mate" do
+      let(:output) { double('output').as_null_object }
+      let(:algorithm) { Algorithm.new(output) }
+
+      it "should 'mate' substrings of population citizen strings for non-elite citizens, add them to the buffer and perhaps mutate" do
+        algorithm.init_population
+        algorithm.population.each do |citizen|
+          citizen.fitness = algorithm.calc_fitness(citizen)
+        end
+        
+        algorithm.mate
+        
+      end
+    end
     
     describe "#elitism" do
       let(:output) { double('output').as_null_object }
