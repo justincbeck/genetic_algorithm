@@ -84,12 +84,12 @@ module Genetics
       end
     end
     
-    def mutate(string)
+    def mutate(citizen)
       tsize = @@GA_TARGET.length
       ipos = rand(@@RAND_MAX) % tsize
       delta = (rand(@@RAND_MAX) % 90) + 32
       
-      citizen.string[ipos] = ((citizen.string.getbyte(ipos) + delta) % 122).chr
+      ((citizen.string.getbyte(ipos) + delta) % 122).chr
     end
     
     def swap
