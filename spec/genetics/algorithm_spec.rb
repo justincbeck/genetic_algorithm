@@ -97,11 +97,15 @@ module Genetics
     end
     
     describe "#mutate" do
+      original_string = "Csnqt(xdfoe%"
+      
       let(:output) { double('output').as_null_object }
       let(:algorithm) { Algorithm.new(output) }
+      let(:citizen) { Citizen.new(original_string, 0)}
       
-      it "should return a mutated string" do
-        algorithm.mutate("Csnqt(xdfoe%").should be_an_instance_of(String)
+      it "should mutate the citizen's string" do
+        algorithm.mutate(citizen)
+        # citizen.string.should_not eql(original_string)
       end
     end
     
