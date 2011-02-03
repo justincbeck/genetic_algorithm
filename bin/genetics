@@ -3,4 +3,4 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'genetics'
 
 algorithm = Genetics::Algorithm.new(STDOUT)
-algorithm.execute
+algorithm.execute(ARGV[0])
