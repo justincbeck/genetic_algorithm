@@ -11,7 +11,7 @@ module Genetics
   class Algorithm
     attr_accessor :population, :buffer # For testing
     
-    GA_POP_SIZE = 2048
+    GA_POP_SIZE = 4096
     GA_MAX_ITERATIONS = 16384
     RAND_MAX = 32767
     GA_ELITISM_RATE = 0.10
@@ -57,9 +57,6 @@ module Genetics
     end
     
     def print_best(citizen)
-      if citizen.fitness < 5
-        @output.puts("Stop here!")
-      end
       @output.puts("Best: #{citizen.string} (#{citizen.fitness})")
     end
     

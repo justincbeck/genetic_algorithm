@@ -8,7 +8,7 @@ module Genetics
       
       it "should populate with citizens" do
         algorithm.init_population
-        algorithm.population.size.should eql(2048)
+        algorithm.population.size.should eql(4096)
       end
     end
     

@@ -24,6 +24,8 @@ GEM
       columnize (>= 0.3.1)
       linecache19 (>= 0.5.11)
       ruby_core_source (>= 0.1.4)
+    ruby-debug-ide19 (0.4.12)
+      ruby-debug-base19 (~> 0.11.20)
     ruby_core_source (0.1.4)
       archive-tar-minitar (>= 0.5.2)
     yamler (0.1.0)
@@ -35,3 +37,4 @@ DEPENDENCIES
   cover_me (>= 1.0.0.rc5)
   rspec
   ruby-debug-base19
+  ruby-debug-ide19
