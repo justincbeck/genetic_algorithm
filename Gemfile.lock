@@ -1,6 +1,8 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    archive-tar-minitar (0.5.2)
+    columnize (0.3.2)
     configatron (2.6.4)
       yamler (>= 0.1.0)
     cover_me (1.0.0.rc5)
@@ -8,6 +10,8 @@ GEM
       hashie
     diff-lcs (1.1.2)
     hashie (1.0.0)
+    linecache19 (0.5.11)
+      ruby_core_source (>= 0.1.4)
     rspec (2.4.0)
       rspec-core (~> 2.4.0)
       rspec-expectations (~> 2.4.0)
@@ -16,6 +20,14 @@ GEM
     rspec-expectations (2.4.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.4.0)
+    ruby-debug-base19 (0.11.24)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby_core_source (>= 0.1.4)
+    ruby-debug-ide19 (0.4.12)
+      ruby-debug-base19 (~> 0.11.20)
+    ruby_core_source (0.1.4)
+      archive-tar-minitar (>= 0.5.2)
     yamler (0.1.0)
 
 PLATFORMS
@@ -24,3 +36,5 @@ PLATFORMS
 DEPENDENCIES
   cover_me (>= 1.0.0.rc5)
   rspec
+  ruby-debug-base19
+  ruby-debug-ide19
